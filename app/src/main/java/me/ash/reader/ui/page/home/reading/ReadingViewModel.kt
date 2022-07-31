@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,6 +15,7 @@ import kotlinx.coroutines.launch
 import me.ash.reader.data.model.article.ArticleWithFeed
 import me.ash.reader.data.repository.RssHelper
 import me.ash.reader.data.repository.RssRepository
+import me.ash.reader.ui.page.common.RouteName
 import javax.inject.Inject
 
 @HiltViewModel
@@ -111,6 +113,19 @@ class ReadingViewModel @Inject constructor(
             rssRepository.get().updateArticleInfo(
                 articleWithFeed.article.copy(isStarred = isStarred)
             )
+        }
+    }
+
+    fun nextArticle(navController: NavController) {
+        val cur = _readingUiState.value.articleWithFeed?.article
+        if (cur != null) {
+            viewModelScope.launch {
+                val next = rssRepository.get().findNextArticleByDate(cur.feedId, cur.date)
+                navController.popBackStack()
+                if (next != null) {
+                    navController.navigate("${RouteName.READING}/${next.article.id}")
+                }
+            }
         }
     }
 

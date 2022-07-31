@@ -127,6 +127,9 @@ abstract class AbstractRssRepository constructor(
 
     suspend fun findArticleById(id: String): ArticleWithFeed? = articleDao.queryById(id)
 
+    suspend fun findNextArticleByDate(feedId: String, date: Date): ArticleWithFeed? =
+        articleDao.queryNextByDate(feedId, date, true)
+
     suspend fun isFeedExist(url: String): Boolean = feedDao.queryByLink(context.currentAccountId, url).isNotEmpty()
 
     suspend fun updateGroup(group: Group) {

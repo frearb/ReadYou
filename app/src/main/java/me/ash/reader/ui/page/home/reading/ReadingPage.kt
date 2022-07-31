@@ -90,6 +90,9 @@ fun ReadingPage(
                         onStarred = {
                             readingViewModel.markStarred(it)
                         },
+                        onNextArticle = {
+                            readingViewModel.nextArticle(navController)
+                        },
                         onFullContent = {
                             if (it) readingViewModel.renderFullContent()
                             else readingViewModel.renderDescriptionContent()
