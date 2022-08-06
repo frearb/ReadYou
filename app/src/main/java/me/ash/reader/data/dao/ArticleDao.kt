@@ -518,18 +518,6 @@ interface ArticleDao {
     )
     suspend fun queryById(id: String): ArticleWithFeed?
 
-    @Transaction
-    @Query(
-        """
-        SELECT * FROM article
-        WHERE feedId = :feedId
-        AND isUnread = :isUnread
-        AND date <= :date
-        ORDER BY date DESC LIMIT 1
-        """
-    )
-    suspend fun queryNextByDate(feedId: String, date: Date, isUnread: Boolean): ArticleWithFeed?
-
     @Insert
     suspend fun insertList(articles: List<Article>): List<Long>
 
