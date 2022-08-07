@@ -57,3 +57,18 @@ fun LazyListState.isScrollDown(): Boolean {
 
     return isScrollDown
 }
+
+@Composable
+fun LazyListState.lastItemIsVisible(): Boolean {
+    var isVisible by remember { mutableStateOf(false) }
+
+    LaunchedEffect(this) {
+        snapshotFlow { isScrollInProgress }.collect {
+            if (!isScrollInProgress && layoutInfo.visibleItemsInfo.isNotEmpty()) {
+                val last = layoutInfo.visibleItemsInfo.last()
+                isVisible = last.index == layoutInfo.totalItemsCount - 1
+            }
+        }
+    }
+    return isVisible
+}

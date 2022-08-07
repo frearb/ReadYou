@@ -15,6 +15,7 @@ import me.ash.reader.data.model.preference.LocalReadingPageTonalElevation
 import me.ash.reader.ui.component.base.RYScaffold
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.isScrollDown
+import me.ash.reader.ui.ext.lastItemIsVisible
 import me.ash.reader.ui.page.home.HomeViewModel
 
 @Composable
@@ -27,7 +28,8 @@ fun ReadingPage(
     val readingUiState = readingViewModel.readingUiState.collectAsStateValue()
     val homeUiState = homeViewModel.homeUiState.collectAsStateValue()
     val isShowToolBar = if (LocalReadingAutoHideToolbar.current.value) {
-        readingUiState.articleWithFeed != null && !readingUiState.listState.isScrollDown()
+        readingUiState.articleWithFeed != null &&
+                (!readingUiState.listState.isScrollDown() || readingUiState.listState.lastItemIsVisible())
     } else {
         true
     }
